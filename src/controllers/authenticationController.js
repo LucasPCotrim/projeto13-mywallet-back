@@ -1,14 +1,8 @@
 import db from '../databases/mongodb.js';
-import joi from 'joi';
+import { authSignUpSchema } from '../schemas/authenticationSchemas.js';
 import bcrypt from 'bcrypt';
 
 export async function userSignUp(req, res) {
-  const authSignUpSchema = joi.object({
-    name: joi.string().required(),
-    email: joi.string().email().required(),
-    password: joi.string().required(),
-    confirmPassword: joi.ref('password'),
-  });
   try {
     const user = req.body;
 
