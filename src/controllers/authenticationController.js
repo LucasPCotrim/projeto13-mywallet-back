@@ -4,16 +4,16 @@ import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 
 export async function userSignUp(req, res) {
+  // Obtain user
+  const user = req.body;
+
+  // Validate user
+  const { error: validError } = authSignUpSchema.validate(user);
+  if (validError) {
+    return res.status(422).send({ message: String(validError) });
+  }
+
   try {
-    // Obtain user
-    const user = req.body;
-
-    // Validate user
-    const { error: validError } = authSignUpSchema.validate(user);
-    if (validError) {
-      return res.status(422).send({ message: String(validError) });
-    }
-
     // Check if email is already registered
     const checkExistingEmail = await db.collection('users').findOne({ email: user.email });
     if (checkExistingEmail) {
@@ -37,16 +37,16 @@ export async function userSignUp(req, res) {
 }
 
 export async function userLogin(req, res) {
+  // Obtain user
+  const user = req.body;
+
+  // Validate user
+  const { error: validError } = authLoginSchema.validate(user);
+  if (validError) {
+    return res.status(422).send({ message: String(validError) });
+  }
+
   try {
-    // Obtain user
-    const user = req.body;
-
-    // Validate user
-    const { error: validError } = authLoginSchema.validate(user);
-    if (validError) {
-      return res.status(422).send({ message: String(validError) });
-    }
-
     // Check if email and password are correct
     const existingUser = await db.collection('users').findOne({ email: user.email });
     const correctPassword = existingUser
