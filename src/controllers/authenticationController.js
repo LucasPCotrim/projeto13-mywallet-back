@@ -25,7 +25,9 @@ export async function userSignUp(req, res) {
     await db
       .collection('users')
       .insertOne({ name: user.name, email: user.email, password: passwordHash });
-    return res.status(201).send({ message: 'Succesful sign-up' });
+    return res
+      .status(201)
+      .send({ message: 'Succesful sign-up', user: { name: user.name, email: user.email } });
 
     // Error during Sign Up
   } catch (error) {
@@ -58,7 +60,11 @@ export async function userLogin(req, res) {
     await db.collection('sessions').deleteMany({ userId: existingUser._id });
     const token = uuid();
     await db.collection('sessions').insertOne({ token, userId: existingUser._id });
-    return res.status(200).send({ message: 'Successful login', token, name: existingUser.name });
+    return res.status(200).send({
+      message: 'Successful login',
+      token,
+      user: { name: existingUser.name, email: existingUser.email },
+    });
 
     // Error during Login
   } catch (error) {
