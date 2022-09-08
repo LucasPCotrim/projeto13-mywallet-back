@@ -26,6 +26,8 @@ export async function userSignUp(req, res) {
       .collection('users')
       .insertOne({ name: user.name, email: user.email, password: passwordHash });
     return res.status(201).send({ message: 'Succesful sign-up' });
+
+    // Error during Sign Up
   } catch (error) {
     console.log(error);
     return res.status(500).send({ message: 'An error occured during user sign-up!' });
@@ -57,6 +59,8 @@ export async function userLogin(req, res) {
     const token = uuid();
     await db.collection('sessions').insertOne({ token, userId: existingUser._id });
     return res.status(200).send({ message: 'Successful login', token, name: existingUser.name });
+
+    // Error during Login
   } catch (error) {
     console.log(error);
     return res.status(500).send({ message: 'An error occured during user login!' });
