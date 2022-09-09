@@ -1,5 +1,5 @@
 import db from '../database/mongodb.js';
-import ObjectId from 'express';
+import { ObjectId } from 'mongodb';
 import dayjs from 'dayjs';
 import { transactionSchema } from '../schemas/transactionSchemas.js';
 
@@ -61,19 +61,10 @@ export async function deleteTransaction(req, res) {
   // Obtain user
   const { user } = res.locals;
   try {
-    // Check if transaction ID matches transaction from user
-    const foundTransaction = await db
-      .collection('transactions')
-      .find({ _id: new ObjectId(transactionId), userId: user._id });
-    if (!foundTransaction) {
-      return res
-        .status(404)
-        .send({ message: 'No documents matched the query. Deleted 0 documents.' });
-    }
-    // Delete transaction
+    // Checks if transaction was made by user and deletes it
     const deletionResult = await db
       .collection('transactions')
-      .deleteOne({ _id: new ObjectId(transactionId) });
+      .deleteOne({ _id: new ObjectId(transactionId), userId: user._id });
     if (deletionResult.deletedCount === 1) {
       return res.status(200).send({ message: `Successfully deleted transaction ${transactionId}` });
     } else {
