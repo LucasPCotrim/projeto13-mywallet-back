@@ -56,7 +56,7 @@ export async function deleteTransaction(req, res) {
   const transactionId = req.params.transactionId;
   console.log(transactionId);
   if (!transactionId) {
-    res.status(422).send({ message: 'Error: Unable to delete transaction without id' });
+    return res.status(422).send({ message: 'Error: Unable to delete transaction without id' });
   }
   // Obtain user
   const { user } = res.locals;
