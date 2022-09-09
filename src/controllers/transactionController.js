@@ -58,10 +58,8 @@ export async function deleteTransaction(req, res) {
   if (!transactionId) {
     res.status(422).send({ message: 'Error: Unable to delete transaction without id' });
   }
-
   // Obtain user
   const { user } = res.locals;
-
   try {
     // Check if transaction ID matches transaction from user
     const foundTransaction = await db
