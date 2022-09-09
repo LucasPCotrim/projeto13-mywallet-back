@@ -1,4 +1,4 @@
-import db from '../databases/mongodb.js';
+import db from '../database/mongodb.js';
 
 export async function authorizeUserMiddleware(req, res, next) {
   // Obtain user authentication token

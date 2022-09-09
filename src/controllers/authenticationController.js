@@ -1,4 +1,4 @@
-import db from '../databases/mongodb.js';
+import db from '../database/mongodb.js';
 import { authSignUpSchema, authLoginSchema } from '../schemas/authenticationSchemas.js';
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';

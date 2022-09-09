@@ -1,4 +1,4 @@
-import db from '../databases/mongodb.js';
+import db from '../database/mongodb.js';
 import dayjs from 'dayjs';
 import { transactionSchema } from '../schemas/transactionSchemas.js';
 
