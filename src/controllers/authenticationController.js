@@ -80,7 +80,7 @@ export async function UserlogOut(req, res) {
   try {
     // Remove user session from Database
     await db.collection('sessions').deleteOne({ userId: user._id });
-    res.status(200).send({ message: 'Session succesfully deleted' });
+    return res.status(200).send({ message: 'Session succesfully deleted' });
 
     // Error when deleting user session
   } catch (error) {
