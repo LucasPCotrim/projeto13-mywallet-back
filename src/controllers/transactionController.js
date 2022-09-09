@@ -54,7 +54,6 @@ export async function registerTransaction(req, res) {
 export async function deleteTransaction(req, res) {
   // Obtain Transaction ID
   const transactionId = req.params.transactionId;
-  console.log(transactionId);
   if (!transactionId) {
     return res.status(422).send({ message: 'Error: Unable to delete transaction without id' });
   }
