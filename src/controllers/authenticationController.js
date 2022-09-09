@@ -72,3 +72,19 @@ export async function userLogin(req, res) {
     return res.status(500).send({ message: 'An error occured during user login!' });
   }
 }
+
+export async function UserlogOut(req, res) {
+  // Obtain user
+  const { user } = res.locals;
+
+  try {
+    // Remove user session from Database
+    await db.collection('sessions').deleteOne({ userId: user._id });
+    res.status(200).send({ message: 'Session succesfully deleted' });
+
+    // Error when deleting user session
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ message: 'An error occured when logging out' });
+  }
+}
