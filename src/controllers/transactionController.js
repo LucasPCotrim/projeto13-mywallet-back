@@ -77,3 +77,55 @@ export async function deleteTransaction(req, res) {
     return res.status(500).send({ message: 'An error occured when deleting transaction' });
   }
 }
+
+export async function updateTransaction(req, res) {
+  // Obtain Transaction ID
+  const transactionId = req.params.transactionId;
+  if (!transactionId) {
+    return res.status(422).send({ message: 'Error: Unable to delete transaction without id' });
+  }
+  // Obtain user
+  const { user } = res.locals;
+  // Obtain transaction
+  const { type, description, value } = req.body;
+  // Validate transaction
+  const { error: validError } = transactionSchema.validate({ type, description, value });
+  if (validError) {
+    return res.status(422).send({ message: String(validError) });
+  }
+
+  try {
+    // Checks if transaction was made by user
+    const userTransaction = await db
+      .collection('transactions')
+      .findOne({ _id: new ObjectId(transactionId), userId: user._id });
+    if (!userTransaction) {
+      return res
+        .status(404)
+        .send({ message: 'No documents matched the query. Updated 0 documents.' });
+    }
+    // Update transaction
+    const updateResult = await db.collection('transactions').updateOne(
+      { _id: new ObjectId(transactionId), userId: user._id },
+      {
+        $set: {
+          type,
+          description,
+          value,
+        },
+      }
+    );
+    if (updateResult.modifiedCount === 1) {
+      return res.status(200).send({ message: `Successfully updated transaction ${transactionId}` });
+    } else {
+      return res
+        .status(404)
+        .send({ message: 'No documents matched the query. Updated 0 documents.' });
+    }
+
+    // Error when updating transaction
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ message: 'An error occured when deleting transaction' });
+  }
+}
