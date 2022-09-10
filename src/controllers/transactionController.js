@@ -115,7 +115,7 @@ export async function updateTransaction(req, res) {
         },
       }
     );
-    if (updateResult.modifiedCount === 1) {
+    if (updateResult.matchedCount === 1) {
       return res.status(200).send({ message: `Successfully updated transaction ${transactionId}` });
     } else {
       return res
